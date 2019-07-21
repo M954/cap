@@ -4,6 +4,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 $(document).ajaxSend(function(e, xhr, options) {
     xhr.setRequestHeader(header, token);
 });
+var pageSize = 100;
 
 init_picture();
 initRecord();
@@ -23,15 +24,19 @@ function init_picture() {
 	$.ajax({
 	    url: '/search',
 	    type: 'POST',
-	    data: {'content':key,
-				'provider':author,
-				'place':place,
-				'starttime':starttime,
-				'endtime':endtime,
-				'id':""
+	    data: {
+            'pageSize': pageSize,
+            'currentPage': 1,
+            'content':key,
+            'provider':author,
+            'place':place,
+            'starttime':starttime,
+            'endtime':endtime,
+            'id':""
 			},
 	    success:function(res){
-            show_picture(res);
+            res = eval('(' + res + ')');
+            show_picture(res.data);
         }
 	}).done(function(res) {
 	}).fail(function(res) {
@@ -83,10 +88,13 @@ $("#search").click(function(){
 				'place':place,
 				'starttime':starttime,
 				'endtime':endtime,
-				'id':""
+				'id':"",
+                'pageSize': pageSize,
+                'currentPage': 1
 			},
 	    success:function(res){
-            show_picture(res);
+            res = eval('(' + res + ')');
+            show_picture(res.data);
         }
 	}).done(function(res) {
 	}).fail(function(res) {
@@ -112,13 +120,14 @@ $('.prebutton').click(function(){
 function show_picture(res) {
 	let picture_contain = $("#container");
 	picture_contain.empty();
-	res = eval('(' + res + ')');
 	$.each(res, function(i, item) {
 		let div = $("<div></div>");
 		div.addClass("image label p");
 
 		let image = $("<img>");
-		image.attr("src", item.imgPath);
+        let image_path = item.imgPath.slice(0,11) + '-short' + item.imgPath.slice(11);
+		console.log(image_path);
+		image.attr("src", image_path);
 		image.addClass("show");
 		image.attr("id", item.id);
 
@@ -192,10 +201,14 @@ function showclick(){
 	            'provider': "",
 	            'place': "",
 	            'starttime': "",
-	            'endtime': ""
+	            'endtime': "",
+                'pageSize': pageSize,
+                'currentPage': 1
 	        },
 	        success: function (res) {
-	            picture_detail(res);
+				res = res.replace("\\t","$");
+                res = eval('(' + res + ')');
+	            picture_detail(res.data);
 	            let show = $('.picture_show');
 	            show.removeAttr('hidden');
 	        }
@@ -207,8 +220,6 @@ function showclick(){
 
 // "{\"id\":\"1\", \"provider\":\"哈哈哈\", \"label\":\"a\tb\", \"dateTime\":\"2018-05-12\", \"place\":\"雁栖湖\", \"description\":\"秋天拍的\", \"published\":\"0\", \"copyright\":\"0\", \"imgPath\":\"../images/1.png\"}"
 function picture_detail(res){
-    res = res.replace("\\t","$");
-    res = eval('(' + res + ')');
     res = res[0];
     console.log(res);
     let detail_id = $(".detail_id");
@@ -303,6 +314,9 @@ function getCookie(c_name){
 }　
 
 function setRecord(key, content){
+	if(content.length == 0){
+		return;
+	}
 	let old_content = getCookie(key);
 	// old_content = "hhh";
 	let key_list = old_content.split("$");
