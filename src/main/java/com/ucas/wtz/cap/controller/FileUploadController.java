@@ -177,7 +177,7 @@ public class FileUploadController {
         pageHelper.setPageSize(pageSize);
         pageHelper.setTotalPageNum((int) Math.ceil(timeRe.size() * 1.0 / pageSize));
 
-        pageHelper.setData(timeRe.subList(Math.min((currentPage - 1) * pageSize,timeRe.size()-1), Math.min(currentPage * pageSize,timeRe.size()-1)));
+        pageHelper.setData(timeRe.subList(Math.min((currentPage - 1) * pageSize,timeRe.size()-1), Math.min(currentPage * pageSize,timeRe.size())));
         String re = JSON.toJSONString(pageHelper);
         System.out.println(re);
         return re;
