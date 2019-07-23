@@ -208,8 +208,8 @@ function showclick(){
 			success: function (res) {
 				// res = res.replace("\\t","$");
 				res = eval('(' + res + ')');
-				console.log(res);
-				console.log(res.data);
+				// console.log(res);
+				// console.log(res.data);
 				picture_detail(res.data);
 				let show = $('.picture_show');
 				show.removeAttr('hidden');
