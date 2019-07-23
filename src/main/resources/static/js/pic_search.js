@@ -2,7 +2,7 @@ console.log("hhh");
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 $(document).ajaxSend(function(e, xhr, options) {
-    xhr.setRequestHeader(header, token);
+	xhr.setRequestHeader(header, token);
 });
 var pageSize = 100;
 
@@ -22,22 +22,22 @@ function init_picture() {
 	let endtime = "";
 
 	$.ajax({
-	    url: '/search',
-	    type: 'POST',
-	    data: {
-            'pageSize': pageSize,
-            'currentPage': 1,
-            'content':key,
-            'provider':author,
-            'place':place,
-            'starttime':starttime,
-            'endtime':endtime,
-            'id':""
-			},
-	    success:function(res){
-            res = eval('(' + res + ')');
-            show_picture(res.data);
-        }
+		url: '/search',
+		type: 'POST',
+		data: {
+			'pageSize': pageSize,
+			'currentPage': 1,
+			'content':key,
+			'provider':author,
+			'place':place,
+			'starttime':starttime,
+			'endtime':endtime,
+			'id':""
+		},
+		success:function(res){
+			res = eval('(' + res + ')');
+			show_picture(res.data);
+		}
 	}).done(function(res) {
 	}).fail(function(res) {
 	});
@@ -81,21 +81,21 @@ $("#search").click(function(){
 	}
 
 	$.ajax({
-	    url: '/search',
-	    type: 'POST',
-	    data: {'content':key,
-				'provider':author,
-				'place':place,
-				'starttime':starttime,
-				'endtime':endtime,
-				'id':"",
-                'pageSize': pageSize,
-                'currentPage': 1
-			},
-	    success:function(res){
-            res = eval('(' + res + ')');
-            show_picture(res.data);
-        }
+		url: '/search',
+		type: 'POST',
+		data: {'content':key,
+			'provider':author,
+			'place':place,
+			'starttime':starttime,
+			'endtime':endtime,
+			'id':"",
+			'pageSize': pageSize,
+			'currentPage': 1
+		},
+		success:function(res){
+			res = eval('(' + res + ')');
+			show_picture(res.data);
+		}
 	}).done(function(res) {
 	}).fail(function(res) {
 	});
@@ -125,7 +125,7 @@ function show_picture(res) {
 		div.addClass("image label p");
 
 		let image = $("<img>");
-        let image_path = item.imgPath.slice(0,11) + '-short' + item.imgPath.slice(11);
+		let image_path = item.imgPath.slice(0,11) + '-short' + item.imgPath.slice(11);
 		console.log(image_path);
 		image.attr("src", image_path);
 		image.addClass("show");
@@ -147,146 +147,148 @@ function show_picture(res) {
 		div.append(des);
 
 		picture_contain.append(div);
-    });
-    showclick();
+	});
+	showclick();
 }
 
 $("#starttime").calendar({
 	type: 'date',
 	formatter: { // 自定义日期的格式
-        date: function(date, settings) {
-            if (!date) return '';
+		date: function(date, settings) {
+			if (!date) return '';
 
-            var year  = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day   = date.getDate();
+			var year  = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var day   = date.getDate();
 
-            month = month < 10 ? '0'+month : month;
-            day   = day   < 10 ? '0'+day   : day;
+			month = month < 10 ? '0'+month : month;
+			day   = day   < 10 ? '0'+day   : day;
 
-            return year + '-' + month + '-' + day;
-        }
-    }
+			return year + '-' + month + '-' + day;
+		}
+	}
 });
 
 $("#endtime").calendar({
 	type: 'date',
 	formatter: { // 自定义日期的格式
-        date: function(date, settings) {
-            if (!date) return '';
+		date: function(date, settings) {
+			if (!date) return '';
 
-            var year  = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day   = date.getDate();
+			var year  = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var day   = date.getDate();
 
-            month = month < 10 ? '0'+month : month;
-            day   = day   < 10 ? '0'+day   : day;
+			month = month < 10 ? '0'+month : month;
+			day   = day   < 10 ? '0'+day   : day;
 
-            return year + '-' + month + '-' + day;
-        }
-    }
+			return year + '-' + month + '-' + day;
+		}
+	}
 });
 
 function showclick(){
 	$(".show").click(function(){
 		content = $(this).attr('id');
 		let show = $('.picture_show');
-	    show.removeAttr('hidden');
+		show.removeAttr('hidden');
 		$.ajax({
-	        url: '/search',
-	        type: 'POST',
-	        data: {
-	            'id': content,
-	            'content':"",
-	            'provider': "",
-	            'place': "",
-	            'starttime': "",
-	            'endtime': "",
-                'pageSize': pageSize,
-                'currentPage': 1
-	        },
-	        success: function (res) {
-				res = res.replace("\\t","$");
-                res = eval('(' + res + ')');
-	            picture_detail(res.data);
-	            let show = $('.picture_show');
-	            show.removeAttr('hidden');
-	        }
-	    }).done(function (res) {
-	    }).fail(function (res) {
-	    });
+			url: '/search',
+			type: 'POST',
+			data: {
+				'id': content,
+				'content':"",
+				'provider': "",
+				'place': "",
+				'starttime': "",
+				'endtime': "",
+				'pageSize': pageSize,
+				'currentPage': 1
+			},
+			success: function (res) {
+				// res = res.replace("\\t","$");
+				res = eval('(' + res + ')');
+				console.log(res);
+				console.log(res.data);
+				picture_detail(res.data);
+				let show = $('.picture_show');
+				show.removeAttr('hidden');
+			}
+		}).done(function (res) {
+		}).fail(function (res) {
+		});
 	});
 }
 
 // "{\"id\":\"1\", \"provider\":\"哈哈哈\", \"label\":\"a\tb\", \"dateTime\":\"2018-05-12\", \"place\":\"雁栖湖\", \"description\":\"秋天拍的\", \"published\":\"0\", \"copyright\":\"0\", \"imgPath\":\"../images/1.png\"}"
 function picture_detail(res){
-    res = res[0];
-    console.log(res);
-    let detail_id = $(".detail_id");
-    detail_id.text(res.id);
-    let detail_author = $('.detail_author');
-    detail_author.text(res.provider);
-    let detail_label = $('.detail_label');
-    detail_label.empty();
-    let tags = res.label.split("$");
-    for(let I = 0; I < tags.length-1; I++){
-        console.log(tags[I]);
-        let tag = $("<a></a>").text(tags[I]);
-        tag.addClass("ui label");
-        detail_label.append(tag);
-    }
-    let detail_date = $('.detail_date');
-    detail_date.text(res.dateTime);
-    let detail_place = $('.detail_place');
-    detail_place.text(res.place);
-    let detail_description = $('.detail_description');
-    detail_description.text(res.description);
-    let detail_published = $('.detail_published');
-    if(res.published == '0'){
-        detail_published.text('已发布');
-    }else{
-        detail_published.text('未发布');
-    }
-    let detail_copyright = $('.detail_copyright');
-    if(res.copyright == '0'){
-        detail_copyright.text('有版权');
-    }else{
-        detail_copyright.text('无版权');
-    }
-    let show_detail = $('.show_detail');
-    console.log(res.imgPath);
-    show_detail.attr("src", res.imgPath);
+	res = res[0];
+	console.log(res);
+	let detail_id = $(".detail_id");
+	detail_id.text(res.id);
+	let detail_author = $('.detail_author');
+	detail_author.text(res.provider);
+	let detail_label = $('.detail_label');
+	detail_label.empty();
+	let tags = res.label.split("\\t");
+	for(let I = 0; I < tags.length-1; I++){
+		console.log(tags[I]);
+		let tag = $("<a></a>").text(tags[I]);
+		tag.addClass("ui label");
+		detail_label.append(tag);
+	}
+	let detail_date = $('.detail_date');
+	detail_date.text(res.dateTime);
+	let detail_place = $('.detail_place');
+	detail_place.text(res.place);
+	let detail_description = $('.detail_description');
+	detail_description.text(res.description);
+	let detail_published = $('.detail_published');
+	if(res.published == '0'){
+		detail_published.text('已发布');
+	}else{
+		detail_published.text('未发布');
+	}
+	let detail_copyright = $('.detail_copyright');
+	if(res.copyright == '0'){
+		detail_copyright.text('有版权');
+	}else{
+		detail_copyright.text('无版权');
+	}
+	let show_detail = $('.show_detail');
+	console.log(res.imgPath);
+	show_detail.attr("src", res.imgPath);
 }
 
 $('.delbutton').click(function(){
-    let detail_id = $(".detail_id");
-    detail_id = detail_id.text();
-    swal({
-            title: "确定删除吗？",
-            text: "你将无法恢复该文件，你的行为将被记录！",
-            icon: "warning",
-            buttons: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "确定删除！",
-            dangerMode: true,
-        }).then(function(willDelete){
-            if(willDelete) {
-                $.ajax({
-                    url: '/deleteImg',
-                    type: 'POST',
-                    data: {
-                        'id': detail_id
-                    },
-                    success: function (res) {
-                        swal("删除！", "文件已经被删除。", "success");
-                    }
-                }).done(function (res) {
-                }).fail(function (res) {
-                });
-            }else{
-                swal("已取消");
-            }
-    	});
+	let detail_id = $(".detail_id");
+	detail_id = detail_id.text();
+	swal({
+		title: "确定删除吗？",
+		text: "你将无法恢复该文件，你的行为将被记录！",
+		icon: "warning",
+		buttons: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "确定删除！",
+		dangerMode: true,
+	}).then(function(willDelete){
+		if(willDelete) {
+			$.ajax({
+				url: '/deleteImg',
+				type: 'POST',
+				data: {
+					'id': detail_id
+				},
+				success: function (res) {
+					swal("删除！", "文件已经被删除。", "success");
+				}
+			}).done(function (res) {
+			}).fail(function (res) {
+			});
+		}else{
+			swal("已取消");
+		}
+	});
 });
 
 $('.detail_close').click(function(){
@@ -296,22 +298,22 @@ $('.detail_close').click(function(){
 
 
 /****************************************************
-cookies 的操作部分
-用来替换常用搜索内容
-*****************************************************/
+ cookies 的操作部分
+ 用来替换常用搜索内容
+ *****************************************************/
 
 function getCookie(c_name){
 	if (document.cookie.length>0){
 		c_start=document.cookie.indexOf(c_name + "=");
-		if (c_start!=-1){ 
+		if (c_start!=-1){
 			c_start=c_start + c_name.length+1;
 			c_end=document.cookie.indexOf(";",c_start);
-			if (c_end==-1) c_end=document.cookie.length;　　
+			if (c_end==-1) c_end=document.cookie.length;
 			return unescape(document.cookie.substring(c_start,c_end));
-		} 
+		}
 	}
 	return ""
-}　
+}
 
 function setRecord(key, content){
 	if(content.length == 0){
@@ -361,7 +363,7 @@ function initRecord(){
 			$(place_text[i]).text(place_list[i]);
 		}
 	}
-}　
+}
 
 // window.onload = function(){
 // 	let cookies = document.cookie.split(';');
